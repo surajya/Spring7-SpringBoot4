@@ -1,0 +1,21 @@
+package com.example.demo.config;
+
+@Configuration
+public class VehicleConfig {
+
+	@Bean
+	public Vehicle vehicle() {
+		Vehicle vehicle = new Vehicle();
+		vehicle.setName("Scarpio");
+		return vehicle;
+	}
+
+	@
+
+	public Vehicle vehicle2() {
+		Vehicle vehicle = new Vehicle();
+		vehicle.setName("Fortuner");
+		return vehicle;
+	}
+
+}
