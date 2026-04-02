@@ -1,0 +1,28 @@
+logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/mydb
+    driver-class-name: org.postgresql.Driver
+    username: myuser
+    password: mypassword
+  sql:
+    init:
+      mode: always
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:  
+        format_sql: true
+
+#Docker command postgres:
+#docker run --name postgres -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -e POSTGRES_DB=mydb -p 5433:5432 -d postgres
+#delete docker container:
+#docker rm -f postgres
+#command to connect to postgres container: docker exec -it postgres psql -U myuser -d mydb
+#docker volume rm <volume_name> : to remove volume created by postgres container
+#docker ps -a : to list all container
+#docker logs <container_id> : to see logs of a container
