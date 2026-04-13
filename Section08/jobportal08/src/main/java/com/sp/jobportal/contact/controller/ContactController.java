@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sp.jobportal.contact.service.ContactService;
 import com.sp.jobportal.dto.ContactRequestDto;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -20,7 +21,7 @@ public class ContactController {
 	private final ContactService contactService;
 
 	@PostMapping(version = "1.0")
-	public ResponseEntity<String> saveContact(@RequestBody ContactRequestDto contactRequestDto) {
+	public ResponseEntity<String> saveContact(@RequestBody @Valid ContactRequestDto contactRequestDto) {
 		boolean isSaved = contactService.saveContact(contactRequestDto);
 		if (isSaved) {
 			return ResponseEntity.status(HttpStatus.CREATED).body("Contact saved successfully");
