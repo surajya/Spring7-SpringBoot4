@@ -22,7 +22,7 @@ public class CompanyController {
 		this.companyService = companyService;
 	}
 
-	@GetMapping(version = "1.0")
+	@GetMapping(path = "/public", version = "1.0")
 	@CrossOrigin(origins = "http://localhost:5173/")
 	public ResponseEntity<List<CompanyDto>> getAllCompanies() {
 		return new ResponseEntity<>(companyService.getAllCompanies(), HttpStatus.OK);
