@@ -39,7 +39,8 @@ public class JobPortalSecurityConfig {
 				//						.requestMatchers("/api/contacts/public").permitAll())
 				//						.requestMatchers(RegexRequestMatcher.regexMatcher(".*public$")).permitAll()
 				//						.requestMatchers("/api/swagger-ui.html").permitAll())
-				.formLogin(flc -> flc.disable())
+				//.formLogin(flc -> flc.disable())
+				.formLogin(withDefaults())
 				.httpBasic(withDefaults())
 				.build();
 	}

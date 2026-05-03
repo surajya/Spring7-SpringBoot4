@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:17
 #    container_name: jobportal
-    restart: unless-stopped
+    restart: on-failure
     ports:
       - "5433:5432"
     environment:
