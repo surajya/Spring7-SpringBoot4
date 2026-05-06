@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sp.jobportal.dto.LoginRequestDto;
 import com.sp.jobportal.dto.LoginResponseDto;
+import com.sp.jobportal.dto.UserDto;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,16 +28,17 @@ public class AuthController {
 	@PostMapping(path = "/login/public", version = "1.0")
 	public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
 		try {
+			System.out.println("username : {} password : {}" + loginRequest.username() + " " + loginRequest.password());
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					loginRequest.username(), loginRequest.password()));
-			LoginResponseDto response = new LoginResponseDto("Login successful", null, "sdkl2211kls");
+			LoginResponseDto response = new LoginResponseDto("Login successful", new UserDto(), "sdkl2211kls");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (BadCredentialsException ex) {
 			LoginResponseDto response = new LoginResponseDto("Invalid username or password", null, null);
 			return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 		} catch (AuthenticationException ex) {
 			LoginResponseDto response = new LoginResponseDto("Authentication failed", null, null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 		} catch (Exception ex) {
 			LoginResponseDto response = new LoginResponseDto("An error occurred during authentication", null, null);
 			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
