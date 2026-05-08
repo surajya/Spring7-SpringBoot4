@@ -18,6 +18,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import com.sp.jobportal.security.filter.JwtTokenValidatorFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,7 +50,8 @@ public class JobPortalSecurityConfig {
 					securePaths.forEach(path -> requests.requestMatchers(path).authenticated());
 					requests.anyRequest().authenticated();
 				})
-				.formLogin(withDefaults())
+				.addFilterBefore(new JwtTokenValidatorFilter(publicPaths), BasicAuthenticationFilter.class)
+				.formLogin(flc -> flc.disable())
 				.httpBasic(withDefaults())
 				.build();
 	}
@@ -64,10 +68,10 @@ public class JobPortalSecurityConfig {
 		//		String encode2 = passwordEncoder().encode("anil@123");
 		//		System.out.println(encode2);
 		var user1 = User.builder().username("suraj")
-				.password("$2a$10$/IsGESy4xTA0oSjQzF4g1e1LXqYCYmsAyXx3GC8p/0ltYGa667YoK").roles("USER")
+				.password(passwordEncoder().encode("suraj@123")).roles("USER")
 				.build();
 		var user2 = User.builder().username("anil")
-				.password("$2a$10$b1tyuMJSbyJJjjs/KLeryua6xNvXZg15tD17bvaVoeM/LUNiUVgDa").roles("ADMIN")
+				.password(passwordEncoder().encode("anil@123")).roles("ADMIN")
 				.build();
 		return new InMemoryUserDetailsManager(user1, user2);
 	}

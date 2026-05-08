@@ -11,11 +11,11 @@ public class PathConfig {
 
 	@Bean("publicPaths")
 	public List<String> publicPaths() {
-		return Arrays.asList("/swagger-ui/index.html", "/v3/api-docs/**");
+		return Arrays.asList("/swagger-ui/index.html", "/v3/api-docs/**", "/api/auth/login/public");
 	}
 
 	@Bean("securePaths")
 	public List<String> securePaths() {
-		return Arrays.asList("/api/companies/public", "/api/contacts/public", "/api/auth/login/public");
+		return Arrays.asList("/api/companies/public", "/api/contacts/public");
 	}
 }
