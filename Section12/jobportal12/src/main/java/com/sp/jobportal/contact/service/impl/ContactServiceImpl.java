@@ -3,10 +3,10 @@ package com.sp.jobportal.contact.service.impl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.sp.jobportal.company.repository.ContactRepository;
 import com.sp.jobportal.contact.service.ContactService;
 import com.sp.jobportal.dto.ContactRequestDto;
 import com.sp.jobportal.entity.Contact;
+import com.sp.jobportal.repository.ContactRepository;
 
 import lombok.AllArgsConstructor;
 

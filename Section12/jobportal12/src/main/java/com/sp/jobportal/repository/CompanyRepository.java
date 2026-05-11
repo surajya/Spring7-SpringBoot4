@@ -1,4 +1,4 @@
-package com.sp.jobportal.company.repository;
+package com.sp.jobportal.repository;
 
 import java.util.List;
 

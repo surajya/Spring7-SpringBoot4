@@ -1,4 +1,4 @@
-package com.sp.jobportal.company.repository;
+package com.sp.jobportal.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

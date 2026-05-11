@@ -5,12 +5,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.sp.jobportal.company.repository.CompanyRepository;
 import com.sp.jobportal.company.service.CompanyService;
 import com.sp.jobportal.dto.CompanyDto;
 import com.sp.jobportal.dto.JobDto;
 import com.sp.jobportal.entity.Company;
 import com.sp.jobportal.entity.Job;
+import com.sp.jobportal.repository.CompanyRepository;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {

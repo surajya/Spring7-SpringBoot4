@@ -16,3 +16,9 @@ CREATE TABLE IF NOT EXISTS companies (
     updated_at  TIMESTAMP   DEFAULT NULL,
     updated_by  VARCHAR(20) DEFAULT NULL
     );
+   
+   
+   
+   
+   
+ 

@@ -11,7 +11,8 @@ public class PathConfig {
 
 	@Bean("publicPaths")
 	public List<String> publicPaths() {
-		return Arrays.asList("/swagger-ui/index.html", "/v3/api-docs/**", "/api/auth/login/public");
+		return Arrays.asList("/swagger-ui/index.html", "/v3/api-docs/**", "/api/auth/login/public",
+				"/api/auth/register/public");
 	}
 
 	@Bean("securePaths")
