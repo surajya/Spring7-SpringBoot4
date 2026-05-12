@@ -1,5 +1,7 @@
 package com.sp.jobportal.company.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sp.jobportal.constanst.ApplicationConstants;
 import com.sp.jobportal.dto.LoginRequestDto;
 import com.sp.jobportal.dto.LoginResponseDto;
 import com.sp.jobportal.dto.RegisterRequestDto;
@@ -60,11 +63,18 @@ public class AuthController {
 	}
 
 	@PostMapping(path = "/register/public", version = "1.0")
-	public ResponseEntity<String> register(@RequestBody RegisterRequestDto registerRequestDto) {
+	public ResponseEntity<?> registerUser(@RequestBody RegisterRequestDto registerRequestDto) {
+		//JobPortalUser userDetails = new JobPortalUser();
+		Optional<JobPortalUser> existingUser = userRepository.readUserByEmailOrMobileNumber(registerRequestDto.email(),
+				registerRequestDto.mobileNumber());
+		if (existingUser.isPresent()) {
+			return new ResponseEntity<>("User with given email or mobile number already exists",
+					HttpStatus.BAD_REQUEST);
+		}
 		JobPortalUser userDetails = new JobPortalUser();
 		BeanUtils.copyProperties(registerRequestDto, userDetails);
 		userDetails.setPasswordHash(passwordEncoder.encode(registerRequestDto.password()));
-		roleRepository.findById(1L).ifPresent(userDetails::setRole);
+		roleRepository.findRoleByName(ApplicationConstants.ROLE_JOB_SEEKER).ifPresent(userDetails::setRole);
 		userRepository.save(userDetails);
 		return new ResponseEntity<>("Registration successful", HttpStatus.OK);
 	}
