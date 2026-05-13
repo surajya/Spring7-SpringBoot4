@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.password.CompromisedPasswordChecker;
+import org.springframework.security.authentication.password.CompromisedPasswordDecision;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,6 +40,7 @@ public class AuthController {
 	private final PasswordEncoder passwordEncoder;
 	private final JobPortalUserRepository userRepository;
 	private final RoleRepository roleRepository;
+	private final CompromisedPasswordChecker compromisedPasswordChecker;
 
 	@PostMapping(path = "/login/public", version = "1.0")
 	public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
@@ -64,7 +67,12 @@ public class AuthController {
 
 	@PostMapping(path = "/register/public", version = "1.0")
 	public ResponseEntity<?> registerUser(@RequestBody RegisterRequestDto registerRequestDto) {
-		//JobPortalUser userDetails = new JobPortalUser();
+		CompromisedPasswordDecision check = compromisedPasswordChecker.check(registerRequestDto.password());
+		if (check.isCompromised()) {
+			return new ResponseEntity<>(
+					"The provided password has been compromised in a data breach. Please choose a different password.",
+					HttpStatus.BAD_REQUEST);
+		}
 		Optional<JobPortalUser> existingUser = userRepository.readUserByEmailOrMobileNumber(registerRequestDto.email(),
 				registerRequestDto.mobileNumber());
 		if (existingUser.isPresent()) {
