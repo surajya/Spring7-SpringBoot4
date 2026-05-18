@@ -11,6 +11,6 @@ import com.sp.jobportal.entity.Company;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
-	@Query("SELECT c FROM Company c LEFT JOIN FETCH c.jobs")
+	@Query("SELECT c FROM Company c LEFT JOIN FETCH c.jobs where status = 'ACTIVE'")
 	List<Company> findAllWithJobs();
 }
