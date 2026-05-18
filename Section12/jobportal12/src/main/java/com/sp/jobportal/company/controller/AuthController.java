@@ -46,10 +46,16 @@ public class AuthController {
 	public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
 		try {
 			System.out.println("username : {} password : {}" + loginRequest.username() + " " + loginRequest.password());
-			Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-					loginRequest.username(), loginRequest.password()));
-			String jwtToken = jwtUtil.generateJwtToken(authenticate);
-			LoginResponseDto response = new LoginResponseDto("Login successful", new UserDto(), jwtToken);
+			Authentication resultAuthenticate =
+					authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+							loginRequest.username(), loginRequest.password()));
+			String jwtToken = jwtUtil.generateJwtToken(resultAuthenticate);
+			UserDto userDto = new UserDto();
+			JobPortalUser loginUser = (JobPortalUser) resultAuthenticate.getPrincipal();
+			BeanUtils.copyProperties(loginUser, userDto);
+			userDto.setRole(loginUser.getRole().getName());
+			userDto.setUserId(loginUser.getId());
+			LoginResponseDto response = new LoginResponseDto("Login successful", userDto, jwtToken);
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (BadCredentialsException ex) {
 			LoginResponseDto response = new LoginResponseDto("Invalid username or password", null, null);
