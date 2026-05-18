@@ -8,16 +8,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.sp.jobportal.security.filter.JwtTokenValidatorFilter;
@@ -35,11 +34,16 @@ public class JobPortalSecurityConfig {
 	@Qualifier("publicPaths")
 	private final List<String> publicPaths;
 
+	//private final AuthenticationProvider authenticationProvider;
+
 	@Bean
-	public AuthenticationManager authenticationManager() throws Exception {
-		var authenticationProvider = new DaoAuthenticationProvider(userDetailsService());
-		authenticationProvider.setPasswordEncoder(passwordEncoder());
+	public AuthenticationManager authenticationManager(AuthenticationProvider authenticationProvider) throws Exception {
 		return new ProviderManager(authenticationProvider);
+	}
+
+	@Bean
+	public CompromisedPasswordChecker compromisedPasswordChecker() {
+		return new HaveIBeenPwnedRestApiPasswordChecker();
 	}
 
 	@Bean
@@ -61,19 +65,19 @@ public class JobPortalSecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
-	public UserDetailsService userDetailsService() {
-		//		String encode = passwordEncoder().encode("suraj@123");
-		//		System.out.println(encode);
-		//		String encode2 = passwordEncoder().encode("anil@123");
-		//		System.out.println(encode2);
-		var user1 = User.builder().username("suraj")
-				.password(passwordEncoder().encode("suraj@123")).roles("USER")
-				.build();
-		var user2 = User.builder().username("anil")
-				.password(passwordEncoder().encode("anil@123")).roles("ADMIN")
-				.build();
-		return new InMemoryUserDetailsManager(user1, user2);
-	}
+	//	@Bean
+	//	public UserDetailsService userDetailsService() {
+	//		//		String encode = passwordEncoder().encode("suraj@123");
+	//		//		System.out.println(encode);
+	//		//		String encode2 = passwordEncoder().encode("anil@123");
+	//		//		System.out.println(encode2);
+	//		var user1 = User.builder().username("suraj")
+	//				.password(passwordEncoder().encode("suraj@123")).roles("USER")
+	//				.build();
+	//		var user2 = User.builder().username("anil")
+	//				.password(passwordEncoder().encode("anil@123")).roles("ADMIN")
+	//				.build();
+	//		return new InMemoryUserDetailsManager(user1, user2);
+	//	}
 
 }
