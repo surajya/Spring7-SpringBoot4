@@ -2,6 +2,8 @@ package com.sp.jobportal.security.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,6 +20,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.sp.jobportal.security.filter.JwtTokenValidatorFilter;
 
@@ -47,8 +54,25 @@ public class JobPortalSecurityConfig {
 	}
 
 	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+		config.setAllowedMethods(Collections.singletonList("*"));
+		config.setAllowedHeaders(Collections.singletonList("*"));
+		config.setAllowCredentials(true);
+		config.setMaxAge(3600L);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+		return source;
+	}
+
+	@Bean
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) {
-		return http.csrf(csrf -> csrf.disable())
+		return http.csrf(csrfConfig -> csrfConfig
+				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+				.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
+				.cors(corsConfig -> corsConfig.configurationSource(corsConfigurationSource()))
 				.authorizeHttpRequests(requests -> {
 					publicPaths.forEach(path -> requests.requestMatchers(path).permitAll());
 					securePaths.forEach(path -> requests.requestMatchers(path).authenticated());
@@ -64,20 +88,5 @@ public class JobPortalSecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
-	//	@Bean
-	//	public UserDetailsService userDetailsService() {
-	//		//		String encode = passwordEncoder().encode("suraj@123");
-	//		//		System.out.println(encode);
-	//		//		String encode2 = passwordEncoder().encode("anil@123");
-	//		//		System.out.println(encode2);
-	//		var user1 = User.builder().username("suraj")
-	//				.password(passwordEncoder().encode("suraj@123")).roles("USER")
-	//				.build();
-	//		var user2 = User.builder().username("anil")
-	//				.password(passwordEncoder().encode("anil@123")).roles("ADMIN")
-	//				.build();
-	//		return new InMemoryUserDetailsManager(user1, user2);
-	//	}
 
 }

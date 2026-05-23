@@ -29,10 +29,12 @@ import com.sp.jobportal.repository.RoleRepository;
 import com.sp.jobportal.security.util.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
 	private final AuthenticationManager authenticationManager;
@@ -44,6 +46,7 @@ public class AuthController {
 
 	@PostMapping(path = "/login/public", version = "1.0")
 	public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
+		log.info("Received login request for username: {}", loginRequest.username());
 		try {
 			System.out.println("username : {} password : {}" + loginRequest.username() + " " + loginRequest.password());
 			Authentication resultAuthenticate =
@@ -73,6 +76,7 @@ public class AuthController {
 
 	@PostMapping(path = "/register/public", version = "1.0")
 	public ResponseEntity<?> registerUser(@RequestBody RegisterRequestDto registerRequestDto) {
+		log.info("Received registration request for email: {}", registerRequestDto.email());
 		CompromisedPasswordDecision check = compromisedPasswordChecker.check(registerRequestDto.password());
 		if (check.isCompromised()) {
 			return new ResponseEntity<>(
@@ -90,7 +94,7 @@ public class AuthController {
 		userDetails.setPasswordHash(passwordEncoder.encode(registerRequestDto.password()));
 		roleRepository.findRoleByName(ApplicationConstants.ROLE_JOB_SEEKER).ifPresent(userDetails::setRole);
 		userRepository.save(userDetails);
-		return new ResponseEntity<>("Registration successful", HttpStatus.OK);
+		return new ResponseEntity<>("User registration successful", HttpStatus.CREATED);
 	}
 
 }
