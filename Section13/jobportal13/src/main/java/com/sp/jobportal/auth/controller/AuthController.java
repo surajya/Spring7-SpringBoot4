@@ -1,4 +1,4 @@
-package com.sp.jobportal.company.controller;
+package com.sp.jobportal.auth.controller;
 
 import java.util.Optional;
 
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sp.jobportal.constanst.ApplicationConstants;
+import com.sp.jobportal.constant.ApplicationConstants;
 import com.sp.jobportal.dto.LoginRequestDto;
 import com.sp.jobportal.dto.LoginResponseDto;
 import com.sp.jobportal.dto.RegisterRequestDto;
