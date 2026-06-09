@@ -1,15 +1,11 @@
 package com.sp.jobportal.auth.controller;
 
-import java.util.Optional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.password.CompromisedPasswordChecker;
-import org.springframework.security.authentication.password.CompromisedPasswordDecision;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +20,7 @@ import com.sp.jobportal.dto.LoginResponseDto;
 import com.sp.jobportal.dto.RegisterRequestDto;
 import com.sp.jobportal.dto.UserDto;
 import com.sp.jobportal.entity.JobPortalUser;
+import com.sp.jobportal.entity.Role;
 import com.sp.jobportal.repository.JobPortalUserRepository;
 import com.sp.jobportal.repository.RoleRepository;
 import com.sp.jobportal.security.util.JwtUtil;
@@ -42,7 +39,6 @@ public class AuthController {
 	private final PasswordEncoder passwordEncoder;
 	private final JobPortalUserRepository userRepository;
 	private final RoleRepository roleRepository;
-	private final CompromisedPasswordChecker compromisedPasswordChecker;
 
 	@PostMapping(path = "/login/public", version = "1.0")
 	public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
@@ -76,25 +72,15 @@ public class AuthController {
 
 	@PostMapping(path = "/register/public", version = "1.0")
 	public ResponseEntity<?> registerUser(@RequestBody RegisterRequestDto registerRequestDto) {
-		log.info("Received registration request for email: {}", registerRequestDto.email());
-		CompromisedPasswordDecision check = compromisedPasswordChecker.check(registerRequestDto.password());
-		if (check.isCompromised()) {
-			return new ResponseEntity<>(
-					"The provided password has been compromised in a data breach. Please choose a different password.",
-					HttpStatus.BAD_REQUEST);
-		}
-		Optional<JobPortalUser> existingUser = userRepository.readUserByEmailOrMobileNumber(registerRequestDto.email(),
-				registerRequestDto.mobileNumber());
-		if (existingUser.isPresent()) {
-			return new ResponseEntity<>("User with given email or mobile number already exists",
-					HttpStatus.BAD_REQUEST);
-		}
-		JobPortalUser userDetails = new JobPortalUser();
-		BeanUtils.copyProperties(registerRequestDto, userDetails);
-		userDetails.setPasswordHash(passwordEncoder.encode(registerRequestDto.password()));
-		roleRepository.findRoleByName(ApplicationConstants.ROLE_JOB_SEEKER).ifPresent(userDetails::setRole);
-		userRepository.save(userDetails);
-		return new ResponseEntity<>("User registration successful", HttpStatus.CREATED);
+		JobPortalUser jobPortalUser = new JobPortalUser();
+		BeanUtils.copyProperties(registerRequestDto, jobPortalUser);
+		jobPortalUser.setPasswordHash(passwordEncoder.encode(registerRequestDto.password()));
+		Role role = roleRepository.findRoleByName(ApplicationConstants.ROLE_JOB_SEEKER)
+				.orElseThrow(() -> new IllegalArgumentException("Role not found: " +
+						ApplicationConstants.ROLE_JOB_SEEKER));
+		jobPortalUser.setRole(role);
+		userRepository.save(jobPortalUser);
+		return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
 	}
 
 }

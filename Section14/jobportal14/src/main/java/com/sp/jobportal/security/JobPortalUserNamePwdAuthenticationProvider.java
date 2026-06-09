@@ -30,7 +30,7 @@ public class JobPortalUserNamePwdAuthenticationProvider implements Authenticatio
 		String password = authentication.getCredentials().toString();
 
 		// Implement your authentication logic here (e.g., check against a database)
-		JobPortalUser jobPortalUser = jobPortalUserRepository.findJobPortalUserByEmail(username)
+		JobPortalUser jobPortalUser = (jobPortalUserRepository.findJobPortalUserByEmail(username)).stream().findFirst()
 				.orElseThrow(() -> new BadCredentialsException("user details not found for email: " + username));
 		List<SimpleGrantedAuthority> authorities = List.of(
 				new SimpleGrantedAuthority(jobPortalUser.getRole().getName()));

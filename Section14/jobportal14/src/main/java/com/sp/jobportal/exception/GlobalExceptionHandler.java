@@ -1,4 +1,4 @@
-package com.sp.jobportal.error;
+package com.sp.jobportal.exception;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,5 +40,13 @@ public class GlobalExceptionHandler {
 				HttpStatus.INTERNAL_SERVER_ERROR, "NullPointerException : " + exception.getMessage(),
 				LocalDateTime.now());
 		return new ResponseEntity<>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@ExceptionHandler(RegistrationValidationException.class)
+	public ResponseEntity<Map<String, String>> handleRegistrationException(
+			RegistrationValidationException ex) {
+		return ResponseEntity
+				.status(HttpStatus.BAD_REQUEST)
+				.body(ex.getErrors());
 	}
 }
