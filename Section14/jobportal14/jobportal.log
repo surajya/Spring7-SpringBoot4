@@ -1,0 +1,42 @@
+2026-05-24T23:07:10.922Z  INFO 7052 --- [restartedMain] com.sp.jobportal.Application             : Starting Application using Java 21.0.8 with PID 7052 (D:\JAVA\UDemy\Spring7-SpringBoot4\Section13\jobportal13\target\classes started by abcd in D:\JAVA\UDemy\Spring7-SpringBoot4\Section13\jobportal13)
+2026-05-24T23:07:10.922Z DEBUG 7052 --- [restartedMain] com.sp.jobportal.Application             : Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-05-24T23:07:10.923Z  INFO 7052 --- [restartedMain] com.sp.jobportal.Application             : No active profile set, falling back to 1 default profile: "default"
+2026-05-24T23:07:10.932Z  INFO 7052 --- [restartedMain] .s.b.d.c.l.DockerComposeLifecycleManager : Using Docker Compose file D:\JAVA\UDemy\Spring7-SpringBoot4\Section13\jobportal13\compose.yml
+2026-05-24T23:07:11.555Z  INFO 7052 --- [restartedMain] .s.b.d.c.l.DockerComposeLifecycleManager : There are already Docker Compose services running, skipping startup
+2026-05-24T23:07:11.921Z  INFO 7052 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-24T23:07:11.956Z  INFO 7052 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31 ms. Found 4 JPA repository interfaces.
+2026-05-24T23:07:12.094Z  INFO 7052 --- [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-05-24T23:07:12.095Z  INFO 7052 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-24T23:07:12.096Z  INFO 7052 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-05-24T23:07:12.133Z  INFO 7052 --- [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 577 ms
+2026-05-24T23:07:12.229Z  INFO 7052 --- [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-24T23:07:12.287Z  INFO 7052 --- [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-24T23:07:12.292Z  INFO 7052 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2026-05-24T23:07:12.364Z  INFO 7052 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@34a427ac
+2026-05-24T23:07:12.365Z  INFO 7052 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2026-05-24T23:07:12.393Z  INFO 7052 --- [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://127.0.0.1:5433/mydb]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.9
+	Default catalog/schema: mydb/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-24T23:07:12.624Z  INFO 7052 --- [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-24T23:07:12.732Z  INFO 7052 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24T23:07:13.044Z  INFO 7052 --- [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name jobPortalUserNamePwdAuthenticationProvider
+2026-05-24T23:07:13.411Z  INFO 7052 --- [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-05-24T23:07:13.416Z  INFO 7052 --- [restartedMain] com.sp.jobportal.Application             : Started Application in 2.522 seconds (process running for 943.727)
+2026-05-24T23:07:13.418Z  WARN 7052 --- [restartedMain] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-05-24T23:07:13.419Z  WARN 7052 --- [restartedMain] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-05-24T23:07:13.424Z  INFO 7052 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-05-24T23:07:27.134Z  INFO 7052 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-05-24T23:07:27.137Z  INFO 7052 --- [Thread-33] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-24T23:07:27.149Z  INFO 7052 --- [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-05-24T23:07:27.154Z  INFO 7052 --- [Thread-33] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-24T23:07:27.155Z  INFO 7052 --- [Thread-33] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-05-24T23:07:27.166Z  INFO 7052 --- [Thread-33] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
