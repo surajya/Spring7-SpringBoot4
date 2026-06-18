@@ -13,6 +13,11 @@ import com.sp.jobportal.entity.Company;
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
 	//JPQL Query
-	@Query("SELECT c FROM Company c JOIN FETCH c.jobs j where j.status = :status")
+	@Query("SELECT DISTINCT c FROM Company c JOIN FETCH c.jobs j where j.status = :status")
 	List<Company> findAllWithJobs(@Param("status") String status);
+
+	//Native/SQL Query
+	@Query(value = "SELECT DISTINCT c.* FROM companies c JOIN jobs j ON c.id = j.company_id where j.status = ?1",
+			nativeQuery = true)
+	List<Company> findAllWithJobsNative(String status);
 }
