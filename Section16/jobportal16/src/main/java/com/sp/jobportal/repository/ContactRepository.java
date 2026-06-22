@@ -1,0 +1,14 @@
+package com.sp.jobportal.repository;
+
+import com.sp.jobportal.entity.Contact;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+
+public interface ContactRepository extends JpaRepository<Contact, Long> {
+
+    List<Contact> findContactsByStatus(String status);
+
+    List<Contact> findContactsByStatusOrderByCreatedAtAsc(String status);
+}
