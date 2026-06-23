@@ -75,7 +75,7 @@ public class AuthController {
         jobPortalUser.setPasswordHash(passwordEncoder.encode(registerRequestDto.password()));
         Role role = roleRepository.findRoleByName(ApplicationConstants.ROLE_ADMIN)
                 .orElseThrow(() -> new IllegalArgumentException("Role not found: " +
-                        ApplicationConstants.ROLE_ADMIN));
+                        ApplicationConstants.ROLE_JOB_SEEKER));
         jobPortalUser.setRole(role);
         userRepository.save(jobPortalUser);
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
