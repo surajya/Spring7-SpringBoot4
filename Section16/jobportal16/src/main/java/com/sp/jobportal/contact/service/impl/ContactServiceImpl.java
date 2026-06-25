@@ -9,6 +9,7 @@ import com.sp.jobportal.repository.ContactRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +36,20 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactResponseDto> fetchNewContactMsgs() {
         List<Contact> contacts = contactRepository.findContactsByStatusOrderByCreatedAtAsc
                 (ApplicationConstants.NEW_MESSAGE);
+        List<ContactResponseDto> responseDtos = contacts.stream()
+                .map(this::transformToDto)
+                .collect(Collectors.toList());
+        return responseDtos;
+    }
+
+    @Override
+    @Transactional
+    public List<ContactResponseDto> fetchNewContactMsgsWithSort(String sortDir, String sortedBy) {
+        Sort sort = sortDir.equalsIgnoreCase("desc")
+                ? Sort.by(sortedBy).descending()
+                : Sort.by(sortedBy).ascending();
+        List<Contact> contacts = contactRepository.findContactsByStatus
+                (ApplicationConstants.NEW_MESSAGE, sort);
         List<ContactResponseDto> responseDtos = contacts.stream()
                 .map(this::transformToDto)
                 .collect(Collectors.toList());

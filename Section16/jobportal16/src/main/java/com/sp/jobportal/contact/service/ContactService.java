@@ -10,4 +10,6 @@ public interface ContactService {
     public boolean saveContact(ContactRequestDto contactRequestDto);
 
     List<ContactResponseDto> fetchNewContactMsgs();
+
+    List<ContactResponseDto> fetchNewContactMsgsWithSort(String sortDir, String sortedBy);
 }
