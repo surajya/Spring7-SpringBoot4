@@ -24,8 +24,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
 
+<<<<<<< Updated upstream
 	private final AuthenticationManager authenticationManager;
 	private final JwtUtil jwtUtil;
+=======
+	private AuthenticationManager authenticationManager;
+	private JwtUtil jwtUtil;
+>>>>>>> Stashed changes
 
 	@PostMapping(path = "/login/public", version = "1.0")
 	public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
@@ -33,8 +38,13 @@ public class AuthController {
 			System.out.println("username : {} password : {}" + loginRequest.username() + " " + loginRequest.password());
 			Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					loginRequest.username(), loginRequest.password()));
+<<<<<<< Updated upstream
 			String jwtToken = jwtUtil.generateJwtToken(authenticate);
 			LoginResponseDto response = new LoginResponseDto("Login successful", new UserDto(), jwtToken);
+=======
+			//String jwtToken = jwtUtil.generateJwtToken(authenticate);
+			LoginResponseDto response = new LoginResponseDto("Login successful", new UserDto(), "fksfs");
+>>>>>>> Stashed changes
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (BadCredentialsException ex) {
 			LoginResponseDto response = new LoginResponseDto("Invalid username or password", null, null);
