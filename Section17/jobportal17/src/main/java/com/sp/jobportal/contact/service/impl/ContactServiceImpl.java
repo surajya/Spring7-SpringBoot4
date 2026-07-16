@@ -6,6 +6,7 @@ import com.sp.jobportal.dto.ContactRequestDto;
 import com.sp.jobportal.dto.ContactResponseDto;
 import com.sp.jobportal.entity.Contact;
 import com.sp.jobportal.repository.ContactRepository;
+import com.sp.jobportal.security.util.ApplicationUtility;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -74,14 +75,8 @@ public class ContactServiceImpl implements ContactService {
     @Override
     @Transactional
     public boolean closeContactMsg(Long id, String status) {
-        Contact contact = contactRepository.findById(id).orElse(null);
-        if (contact == null) {
-            return false;
-        } else {
-            contact.setStatus(status);
-            contactRepository.save(contact);
-        }
-        return true;
+        int updatemessage = contactRepository.updateStatusById(id, ApplicationConstants.CLOSED_MESSAGE, ApplicationUtility.getLoggedInUser());
+        return updatemessage > 0;
     }
 
     public Contact transformToEntity(ContactRequestDto contactRequestDto) {

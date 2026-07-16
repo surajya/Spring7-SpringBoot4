@@ -1,10 +1,11 @@
 package com.sp.jobportal.aspects;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import com.sp.jobportal.dto.RegisterRequestDto;
+import com.sp.jobportal.entity.JobPortalUser;
+import com.sp.jobportal.exception.RegistrationValidationException;
+import com.sp.jobportal.repository.JobPortalUserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -12,13 +13,9 @@ import org.springframework.security.authentication.password.CompromisedPasswordC
 import org.springframework.security.authentication.password.CompromisedPasswordDecision;
 import org.springframework.stereotype.Component;
 
-import com.sp.jobportal.dto.RegisterRequestDto;
-import com.sp.jobportal.entity.JobPortalUser;
-import com.sp.jobportal.exception.RegistrationValidationException;
-import com.sp.jobportal.repository.JobPortalUserRepository;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Aspect
 @Component
@@ -26,48 +23,47 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RegisterValidationAspect {
 
-	private final CompromisedPasswordChecker compromisedPasswordChecker;
-	private final JobPortalUserRepository jobPortalUserRepository;
+    private final CompromisedPasswordChecker compromisedPasswordChecker;
+    private final JobPortalUserRepository jobPortalUserRepository;
 
-	@Before("""
-			execution(* com.sp.jobportal.auth.controller.AuthController
-			.registerUser(..))
-			""")
-	public void validateBeforeRegister(JoinPoint joinPoint) {
-		Object[] args = joinPoint.getArgs();
-		RegisterRequestDto request = (RegisterRequestDto) args[0];
-		log.info("🔍 Validating user registration request");
-		Map<String, String> errors = new HashMap<>();
-		// 1️⃣ Compromised password check
-		CompromisedPasswordDecision decision =
-				compromisedPasswordChecker.check(request.password());
-		if (decision.isCompromised()) {
-			errors.put("password", "Choose a strong password");
-		}
-		// 2️⃣ Existing user check
-		List<JobPortalUser> existingUsers =
-				jobPortalUserRepository.readUserByEmailOrMobileNumber(
-						request.email(), request.mobileNumber());
-		Optional<JobPortalUser> existingUser = existingUsers.stream().findFirst();
-		if (existingUser.isPresent()) {
-			JobPortalUser user = existingUser.get();
+    @Before("""
+            execution(* com.sp.jobportal.auth.controller.AuthController
+            .registerUser(..))
+            """)
+    public void validateBeforeRegister(JoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();
+        RegisterRequestDto request = (RegisterRequestDto) args[0];
+        log.info("🔍 Validating user registration request");
+        Map<String, String> errors = new HashMap<>();
+        // 1️⃣ Compromised password check
+        CompromisedPasswordDecision decision =
+                compromisedPasswordChecker.check(request.password());
+        if (decision.isCompromised()) {
+            errors.put("password", "Choose a strong password");
+        }
+        // 2️⃣ Existing user check
+        Optional<JobPortalUser> existingUser =
+                jobPortalUserRepository.readUserByEmailOrMobileNumber(
+                        request.email(), request.mobileNumber());
+        if (existingUser.isPresent()) {
+            JobPortalUser user = existingUser.get();
 
-			if (user.getEmail().equalsIgnoreCase(request.email())) {
-				errors.put("email", "Email is already registered");
-			}
+            if (user.getEmail().equalsIgnoreCase(request.email())) {
+                errors.put("email", "Email is already registered");
+            }
 
-			if (user.getMobileNumber().equals(request.mobileNumber())) {
-				errors.put("mobileNumber", "Mobile number is already registered");
-			}
-		}
+            if (user.getMobileNumber().equals(request.mobileNumber())) {
+                errors.put("mobileNumber", "Mobile number is already registered");
+            }
+        }
 
-		// 3️⃣ Stop execution if validation fails
-		if (!errors.isEmpty()) {
-			log.warn("❌ Registration validation failed: {}", errors);
-			throw new RegistrationValidationException(errors);
-		}
+        // 3️⃣ Stop execution if validation fails
+        if (!errors.isEmpty()) {
+            log.warn("❌ Registration validation failed: {}", errors);
+            throw new RegistrationValidationException(errors);
+        }
 
-		log.info("✅ Registration validation passed");
-	}
+        log.info("✅ Registration validation passed");
+    }
 
 }
