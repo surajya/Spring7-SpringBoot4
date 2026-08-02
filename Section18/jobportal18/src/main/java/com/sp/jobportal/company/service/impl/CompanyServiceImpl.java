@@ -24,6 +24,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
 
     @Override
+     @Cacheable("companies")
     public List<CompanyDto> getAllCompanies() {
         return companyRepository.findAllWithJobs(ApplicationConstants.JOB_STATUS).stream()
                 .map(this::transformCompanyToDto).toList();
