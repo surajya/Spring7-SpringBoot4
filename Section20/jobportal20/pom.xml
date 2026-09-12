@@ -10,9 +10,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.sp</groupId>
-    <artifactId>jobportal19</artifactId>
+    <artifactId>jobportal20</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>jobportal19</name>
+    <name>jobportal20</name>
     <description/>
     <url/>
     <licenses>
