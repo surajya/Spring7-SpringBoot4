@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -30,9 +32,17 @@ public class JwtUtil {
     private final String subjectName;
 
     @Value("${jwt.expirationTime:1}")
-    private final long expirationTime;
+    private final long expirationDefaultTime;
+
+    @Value("${jwt.prod.expirationTime:1}")
+    private final long expirationProdTime;
 
     public String generateJwtToken(Authentication authentication) {
+        List<String> listOfProfiles = Arrays.asList(env.getActiveProfiles());
+        long expirationTime = expirationDefaultTime;
+        if (listOfProfiles.contains("prod")) {
+            expirationTime = expirationProdTime;
+        }
         String jwtToken;
         String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY,
                 ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
