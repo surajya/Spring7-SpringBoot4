@@ -1,9 +1,13 @@
 package com.sp.jobportal.job.service.impl;
 
+import com.sp.jobportal.dto.JobApplicationDto;
 import com.sp.jobportal.dto.JobDto;
+import com.sp.jobportal.dto.UpdateJobApplicationDto;
 import com.sp.jobportal.entity.Job;
+import com.sp.jobportal.entity.JobApplication;
 import com.sp.jobportal.entity.JobPortalUser;
 import com.sp.jobportal.job.service.IJobService;
+import com.sp.jobportal.repository.JobApplicationRepository;
 import com.sp.jobportal.repository.JobPortalUserRepository;
 import com.sp.jobportal.security.util.ApplicationUtility;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ public class JobServiceImpl implements IJobService {
 
     private final com.sp.jobportal.repository.JobRepository jobRepository;
     private final JobPortalUserRepository userRepository;
+    private final JobApplicationRepository jobApplicationRepository;
 
     @Override
     public List<JobDto> getEmployerJobs(String employerEmail) {
@@ -74,6 +79,21 @@ public class JobServiceImpl implements IJobService {
         Job savedJob = jobRepository.save(job);
         return ApplicationUtility.transformJobToDto(savedJob);
     }
+
+    @Override
+    public List<JobApplicationDto> getApplicationByJobIdForEmployer(Long jobId) {
+        List<JobApplication> jobApplications = jobApplicationRepository.findByJobId(jobId);
+        return jobApplications.stream().map(ApplicationUtility::transformJobApplicationToDto).collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public boolean updateJobApplication(UpdateJobApplicationDto dto) {
+        int updatedRows = jobApplicationRepository.updateStatusAndNotesById(
+                dto.status().name(), dto.notes(), dto.applicationId(), ApplicationUtility.getLoggedInUser());
+        return updatedRows > 0;
+    }
+
 
     private Job tranformDtoToEntity(JobDto jobDto) {
         Job job = new Job();

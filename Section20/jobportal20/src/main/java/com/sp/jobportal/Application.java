@@ -22,7 +22,7 @@ public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-        System.out.println("Job Portal Application is running....");
+        System.out.println("Job Portal Application is running.....");
     }
 
 }

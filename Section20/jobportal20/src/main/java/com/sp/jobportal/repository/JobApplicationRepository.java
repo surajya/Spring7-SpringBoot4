@@ -2,6 +2,8 @@ package com.sp.jobportal.repository;
 
 import com.sp.jobportal.entity.JobApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -14,4 +16,14 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
 
     // Find all applications by user ID
     List<JobApplication> findByUserIdOrderByAppliedAtDesc(Long userId);
+
+    List<JobApplication> findByJobId(Long jobId);
+
+    @Modifying
+    int updateStatusAndNotesById(
+            @Param("status") String name,
+            @Param("notes") String notes,
+            @Param("id") Long id,
+            @Param("updatedBy") String loggedInUser
+    );
 }
