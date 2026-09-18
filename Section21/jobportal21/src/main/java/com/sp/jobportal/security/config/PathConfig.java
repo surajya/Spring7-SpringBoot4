@@ -17,13 +17,16 @@ public class PathConfig {
                 "/api/auth/login/public",
                 "/api/companies/public",
                 "/api/auth/register/public",
-                "/api/csrf-token/public");
+                "/api/csrf-token/public",
+                "/jobportal/actuator/**"
+        );
     }
 
     @Bean("securePaths")
     public List<String> securePaths() {
         return List.of(
-                "/api/**");
+                "/api/**"
+        );
     }
 
     @Bean(name = "adminPaths")
