@@ -1,9 +1,10 @@
 package com.sp.jobportal.dto;
 
-import java.time.LocalDateTime;
-
 import org.springframework.http.HttpStatus;
 
-public record ErrorResponseDto(String apiPath, HttpStatus errorCode, String errorMessage, LocalDateTime timestamp) {
+import java.time.LocalDateTime;
+
+public record ErrorResponseDto(String apiPath, HttpStatus errorCode, String errorMessage, LocalDateTime timestamp,
+                               String traceId) {
 
 }

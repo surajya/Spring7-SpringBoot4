@@ -26,7 +26,8 @@ public class CompanyController {
     @CrossOrigin(origins = "http://localhost:5173/")
     public ResponseEntity<List<CompanyDto>> getAllCompanies() {
         log.info("Received request to get all companies");
-        return new ResponseEntity<>(companyService.getAllCompanies(), HttpStatus.OK);
+        throw new RuntimeException("run time exception");
+        //return new ResponseEntity<>(companyService.getAllCompanies(), HttpStatus.OK);
     }
 
     @PostMapping(path = "/admin", version = "1.0")
