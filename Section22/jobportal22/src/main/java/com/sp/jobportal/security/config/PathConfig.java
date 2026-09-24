@@ -18,7 +18,8 @@ public class PathConfig {
                 "/api/companies/public",
                 "/api/auth/register/public",
                 "/api/csrf-token/public",
-                "/jobportal/actuator/**"
+                "/jobportal/actuator/**",
+                "/api/todos/**"
         );
     }
 
